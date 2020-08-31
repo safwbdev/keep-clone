@@ -5,7 +5,7 @@ const Navbar = () => (
     <Link href="/">
       <a className="navbar-brand">Keep clone</a>
     </Link>
-    <Link href="/">
+    <Link href="/new">
       <a className="create">Create Note</a>
     </Link>
   </nav>
