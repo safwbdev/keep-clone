@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import fetch from "isomorphic-unfetch";
 import { useRouter } from "next/router";
-import { Confirm, Burron, Loader, Button } from "semantic-ui-react";
+import { Confirm, Burron, Loader, Button, Container } from "semantic-ui-react";
 
 const Note = ({ note }) => {
   const [confirm, setConfirm] = useState(false);
@@ -43,20 +44,27 @@ const Note = ({ note }) => {
   };
 
   return (
-    <div className="note-container">
+    <Container textAlign="center">
       {isDeleting ? (
         <Loader active />
       ) : (
         <>
           <h1>{note.title}</h1>
           <p>{note.description}</p>
+          <Link href={`/${note._id}/edit`}>
+            <Button primary>
+              <i aria-hidden="true" class="edit icon"></i> Edit
+            </Button>
+          </Link>
           <Button color="red" onClick={open}>
+            <i aria-hidden="true" class="delete icon"></i>
             Delete
           </Button>
         </>
       )}
+
       <Confirm open={confirm} onConfirm={handleDelete} onCancel={close} />
-    </div>
+    </Container>
   );
 };
 

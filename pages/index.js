@@ -1,17 +1,17 @@
 import Link from "next/link";
 import fetch from "isomorphic-unfetch";
-import { Button, Card } from "semantic-ui-react";
+import { Button, Card, Container, Grid } from "semantic-ui-react";
 
 const Index = ({ notes }) => {
   return (
-    <div className="notes-container">
+    <Container className="notes-container">
       <h1>Notes</h1>
-      <div className="grid wrapper">
+      <Grid>
         {notes &&
           notes.map((note) => {
             return (
-              <div key={note._id}>
-                <Card>
+              <Grid.Column computer={4} mobile={8} tablet={5} key={note._id}>
+                <Card fluid>
                   <Card.Content>
                     <Card.Header>
                       <Link href={`/${note._id}`}>
@@ -19,26 +19,31 @@ const Index = ({ notes }) => {
                       </Link>
                     </Card.Header>
                   </Card.Content>
+                  <Card.Content className="preview">
+                    <Link href={`/${note._id}`}>{note.description}</Link>
+                  </Card.Content>
                   <Card.Content extra>
                     <Link href={`/${note._id}`}>
-                      <Button primary>View</Button>
+                      <Button color="yellow">View</Button>
                     </Link>
                     <Link href={`/${note._id}/edit`}>
-                      <Button primary>Edit</Button>
+                      <Button primary>
+                        {" "}
+                        <i aria-hidden="true" class="edit icon"></i>
+                        Edit
+                      </Button>
                     </Link>
                   </Card.Content>
                 </Card>
-              </div>
+              </Grid.Column>
             );
           })}
-      </div>
-    </div>
+      </Grid>
+    </Container>
   );
 };
 
 Index.getInitialProps = async () => {
-  // const getURL = process.env.MAIN_URL;
-
   const getStatus = process.env.LIVE_STATUS;
   const getURL =
     getStatus === "production"
