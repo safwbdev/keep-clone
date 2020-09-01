@@ -23,8 +23,12 @@ const NewNote = () => {
 
   const createNote = async () => {
     try {
-      const getURL = "https://keep-clone.vercel.app";
-      // const getURL = "http://localhost:3000";
+      const getStatus = process.env.LIVE_STATUS;
+      const getURL =
+        getStatus === "production"
+          ? "https://keep-clone.vercel.app"
+          : "http://localhost:3000";
+
       const res = await fetch(`${getURL}/api/notes`, {
         method: "POST",
         headers: {

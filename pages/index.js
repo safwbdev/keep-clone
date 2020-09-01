@@ -38,8 +38,12 @@ const Index = ({ notes }) => {
 
 Index.getInitialProps = async () => {
   // const getURL = process.env.MAIN_URL;
-  // const getURL = "http://localhost:3000/api/notes";
-  const getURL = "https://keep-clone.vercel.app/api/notes";
+
+  const getStatus = process.env.LIVE_STATUS;
+  const getURL =
+    getStatus === "production"
+      ? "https://keep-clone.vercel.app/api/notes"
+      : "http://localhost:3000/api/notes";
   const res = await fetch(getURL);
   const { data } = await res.json();
 

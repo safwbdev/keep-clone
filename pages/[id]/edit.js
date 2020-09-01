@@ -24,8 +24,12 @@ const EditNote = ({ note }) => {
 
   const updateNote = async () => {
     try {
-      const getURL = "https://keep-clone.vercel.app";
-      // const getURL = "http://localhost:3000";
+      const getStatus = process.env.LIVE_STATUS;
+      const getURL =
+        getStatus === "production"
+          ? "https://keep-clone.vercel.app"
+          : "http://localhost:3000";
+
       const res = await fetch(`${getURL}/api/notes/${router.query.id}`, {
         method: "PUT",
         headers: {
@@ -107,8 +111,11 @@ const EditNote = ({ note }) => {
 };
 
 EditNote.getInitialProps = async ({ query: { id } }) => {
-  // const getURL = "http://localhost:3000";
-  const getURL = "https://keep-clone.vercel.app";
+  const getStatus = process.env.LIVE_STATUS;
+  const getURL =
+    getStatus === "production"
+      ? "https://keep-clone.vercel.app"
+      : "http://localhost:3000";
   const res = await fetch(`${getURL}/api/notes/${id}`);
   const { data } = await res.json();
 

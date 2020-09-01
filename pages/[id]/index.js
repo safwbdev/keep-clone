@@ -23,8 +23,12 @@ const Note = ({ note }) => {
   const deleteNote = async () => {
     const noteID = router.query.id;
     try {
-      const getURL = "https://keep-clone.vercel.app";
-      // const getURL = "http://localhost:3000";
+      const getStatus = process.env.LIVE_STATUS;
+      const getURL =
+        getStatus === "production"
+          ? "https://keep-clone.vercel.app"
+          : "http://localhost:3000";
+
       const deleted = await fetch(`${getURL}/api/notes/${noteID}`, {
         method: "Delete",
       });
@@ -57,8 +61,11 @@ const Note = ({ note }) => {
 };
 
 Note.getInitialProps = async ({ query: { id } }) => {
-  const getURL = "https://keep-clone.vercel.app";
-  // const getURL = "http://localhost:3000";
+  const getStatus = process.env.LIVE_STATUS;
+  const getURL =
+    getStatus === "production"
+      ? "https://keep-clone.vercel.app"
+      : "http://localhost:3000";
   const res = await fetch(`${getURL}/api/notes/${id}`);
   const { data } = await res.json();
 
