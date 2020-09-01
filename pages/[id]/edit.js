@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import fetch from "isomorphic-unfetch";
 import { Button, Form, Loader } from "semantic-ui-react";
@@ -25,17 +24,16 @@ const EditNote = ({ note }) => {
 
   const updateNote = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:3000/api/notes/${router.query.id}`,
-        {
-          method: "PUT",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(form),
-        }
-      );
+      const getURL = "https://keep-clone.vercel.app";
+      // const getURL = "http://localhost:3000";
+      const res = await fetch(`${getURL}/api/notes/${router.query.id}`, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
       router.push("/");
     } catch (error) {
       console.log(error);
@@ -77,7 +75,6 @@ const EditNote = ({ note }) => {
         ) : (
           <Form onSubmit={handleSubmit}>
             <Form.Input
-              fluid
               error={
                 errors.title
                   ? { content: "Please enter a Title", pointing: "below" }
@@ -90,7 +87,6 @@ const EditNote = ({ note }) => {
               onChange={handleChange}
             />
             <Form.TextArea
-              fluid
               error={
                 errors.description
                   ? { content: "Please enter a Description", pointing: "below" }
@@ -111,7 +107,9 @@ const EditNote = ({ note }) => {
 };
 
 EditNote.getInitialProps = async ({ query: { id } }) => {
-  const res = await fetch(`http://localhost:3000/api/notes/${id}`);
+  // const getURL = "http://localhost:3000";
+  const getURL = "https://keep-clone.vercel.app";
+  const res = await fetch(`${getURL}/api/notes/${id}`);
   const { data } = await res.json();
 
   return { note: data };

@@ -23,7 +23,9 @@ const NewNote = () => {
 
   const createNote = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/notes", {
+      const getURL = "https://keep-clone.vercel.app";
+      // const getURL = "http://localhost:3000";
+      const res = await fetch(`${getURL}/api/notes`, {
         method: "POST",
         headers: {
           Accept: "application/json",

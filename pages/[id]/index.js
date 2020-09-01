@@ -23,7 +23,9 @@ const Note = ({ note }) => {
   const deleteNote = async () => {
     const noteID = router.query.id;
     try {
-      const deleted = await fetch(`http://localhost:3000/api/notes/${noteID}`, {
+      const getURL = "https://keep-clone.vercel.app";
+      // const getURL = "http://localhost:3000";
+      const deleted = await fetch(`${getURL}/api/notes/${noteID}`, {
         method: "Delete",
       });
       router.push("/");
@@ -55,7 +57,9 @@ const Note = ({ note }) => {
 };
 
 Note.getInitialProps = async ({ query: { id } }) => {
-  const res = await fetch(`http://localhost:3000/api/notes/${id}`);
+  const getURL = "https://keep-clone.vercel.app";
+  // const getURL = "http://localhost:3000";
+  const res = await fetch(`${getURL}/api/notes/${id}`);
   const { data } = await res.json();
 
   return { note: data };
