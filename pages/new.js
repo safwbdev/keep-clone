@@ -3,6 +3,15 @@ import { useState, useEffect } from "react";
 import fetch from "isomorphic-unfetch";
 import { Button, Form, Loader } from "semantic-ui-react";
 import { useRouter } from "next/router";
+import {
+  NEW_HEADER,
+  NEW_TITLE,
+  NEW_TITLE_ERR_MSG,
+  NEW_DESC,
+  NEW_DESC_ERR_MSG,
+  NEW_CREATE,
+} from "../constants/lang";
+import { LOCALHOST, VERCEL_URL } from "../constants/urls";
 
 const NewNote = () => {
   const [form, setForm] = useState({ title: "", description: "" });
@@ -24,10 +33,7 @@ const NewNote = () => {
   const createNote = async () => {
     try {
       const getStatus = process.env.LIVE_STATUS;
-      const getURL =
-        getStatus === "production"
-          ? "https://keep-clone.vercel.app"
-          : "http://localhost:3000";
+      const getURL = getStatus === "production" ? VERCEL_URL : LOCALHOST;
 
       const res = await fetch(`${getURL}/api/notes`, {
         method: "POST",
@@ -71,7 +77,7 @@ const NewNote = () => {
 
   return (
     <div className="form-container">
-      <h1>Create Note</h1>
+      <h1>{NEW_HEADER}</h1>
       <div>
         {isSubmitting ? (
           <Loader active inline="centered" />
@@ -81,11 +87,11 @@ const NewNote = () => {
               fluid
               error={
                 errors.title
-                  ? { content: "Please enter a Title", pointing: "below" }
+                  ? { content: NEW_TITLE_ERR_MSG, pointing: "below" }
                   : null
               }
-              label="Title"
-              placeholder="Title"
+              label={NEW_TITLE}
+              placeholder={NEW_TITLE}
               name="title"
               onChange={handleChange}
             />
@@ -93,15 +99,15 @@ const NewNote = () => {
               fluid
               error={
                 errors.description
-                  ? { content: "Please enter a Description", pointing: "below" }
+                  ? { content: NEW_DESC_ERR_MSG, pointing: "below" }
                   : null
               }
-              label="Description"
-              placeholder="Description"
+              label={NEW_DESC}
+              placeholder={NEW_DESC}
               name="description"
               onChange={handleChange}
             />
-            <Button type="submit">Create</Button>
+            <Button type="submit">{NEW_CREATE}</Button>
           </Form>
         )}
       </div>

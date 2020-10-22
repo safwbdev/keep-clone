@@ -2,6 +2,15 @@ import { useState, useEffect } from "react";
 import fetch from "isomorphic-unfetch";
 import { Button, Form, Loader } from "semantic-ui-react";
 import { useRouter } from "next/router";
+import {
+  UPDATE_HEADER,
+  UPDATE_TITLE,
+  UPDATE_TITLE_ERR_MSG,
+  UPDATE_DESC,
+  UPDATE_DESC_ERR_MSG,
+  UPDATE_BTN,
+} from "../../constants/lang";
+import { LOCALHOST, VERCEL_URL } from "../../constants/urls";
 
 const EditNote = ({ note }) => {
   const [form, setForm] = useState({
@@ -25,10 +34,7 @@ const EditNote = ({ note }) => {
   const updateNote = async () => {
     try {
       const getStatus = process.env.LIVE_STATUS;
-      const getURL =
-        getStatus === "production"
-          ? "https://keep-clone.vercel.app"
-          : "http://localhost:3000";
+      const getURL = getStatus === "production" ? VERCEL_URL : LOCALHOST;
 
       const res = await fetch(`${getURL}/api/notes/${router.query.id}`, {
         method: "PUT",
@@ -72,7 +78,7 @@ const EditNote = ({ note }) => {
 
   return (
     <div className="form-container">
-      <h1>Update Note</h1>
+      <h1>{UPDATE_HEADER}</h1>
       <div>
         {isSubmitting ? (
           <Loader active inline="centered" />
@@ -81,11 +87,11 @@ const EditNote = ({ note }) => {
             <Form.Input
               error={
                 errors.title
-                  ? { content: "Please enter a Title", pointing: "below" }
+                  ? { content: { UPDATE_TITLE_ERR_MSG }, pointing: "below" }
                   : null
               }
-              label="Title"
-              placeholder="Title"
+              label={UPDATE_TITLE}
+              placeholder={UPDATE_TITLE}
               name="title"
               value={form.title}
               onChange={handleChange}
@@ -93,16 +99,16 @@ const EditNote = ({ note }) => {
             <Form.TextArea
               error={
                 errors.description
-                  ? { content: "Please enter a Description", pointing: "below" }
+                  ? { content: { UPDATE_DESC_ERR_MSG }, pointing: "below" }
                   : null
               }
-              label="Description"
-              placeholder="Description"
+              label={UPDATE_DESC}
+              placeholder={UPDATE_DESC}
               name="description"
               value={form.description}
               onChange={handleChange}
             />
-            <Button type="submit">Update</Button>
+            <Button type="submit">{UPDATE_BTN}</Button>
           </Form>
         )}
       </div>
@@ -112,10 +118,7 @@ const EditNote = ({ note }) => {
 
 EditNote.getInitialProps = async ({ query: { id } }) => {
   const getStatus = process.env.LIVE_STATUS;
-  const getURL =
-    getStatus === "production"
-      ? "https://keep-clone.vercel.app"
-      : "http://localhost:3000";
+  const getURL = getStatus === "production" ? VERCEL_URL : LOCALHOST;
   const res = await fetch(`${getURL}/api/notes/${id}`);
   const { data } = await res.json();
 

@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import fetch from "isomorphic-unfetch";
 import { useRouter } from "next/router";
-import { Confirm, Burron, Loader, Button, Container } from "semantic-ui-react";
+import { Confirm, Loader, Button, Container } from "semantic-ui-react";
+import { NOTE_EDIT, NOTE_DELETE } from "../../constants/lang";
+import { LOCALHOST, VERCEL_URL } from "../../constants/urls";
 
 const Note = ({ note }) => {
   const [confirm, setConfirm] = useState(false);
@@ -25,10 +27,7 @@ const Note = ({ note }) => {
     const noteID = router.query.id;
     try {
       const getStatus = process.env.LIVE_STATUS;
-      const getURL =
-        getStatus === "production"
-          ? "https://keep-clone.vercel.app"
-          : "http://localhost:3000";
+      const getURL = getStatus === "production" ? VERCEL_URL : LOCALHOST;
 
       const deleted = await fetch(`${getURL}/api/notes/${noteID}`, {
         method: "Delete",
@@ -53,12 +52,12 @@ const Note = ({ note }) => {
           <p>{note.description}</p>
           <Link href={`/${note._id}/edit`}>
             <Button primary>
-              <i aria-hidden="true" class="edit icon"></i> Edit
+              <i aria-hidden="true" class="edit icon"></i> {NOTE_EDIT}
             </Button>
           </Link>
           <Button color="red" onClick={open}>
             <i aria-hidden="true" class="delete icon"></i>
-            Delete
+            {NOTE_DELETE}
           </Button>
         </>
       )}
@@ -70,10 +69,7 @@ const Note = ({ note }) => {
 
 Note.getInitialProps = async ({ query: { id } }) => {
   const getStatus = process.env.LIVE_STATUS;
-  const getURL =
-    getStatus === "production"
-      ? "https://keep-clone.vercel.app"
-      : "http://localhost:3000";
+  const getURL = getStatus === "production" ? VERCEL_URL : LOCALHOST;
   const res = await fetch(`${getURL}/api/notes/${id}`);
   const { data } = await res.json();
 
